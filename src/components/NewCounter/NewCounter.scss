@@ -1,0 +1,14 @@
+@import '../../_variables';
+
+.new-counter-container {
+	padding: 10px;
+
+	.blockForm {
+		margin: 10px 0;
+
+		label {
+			color: $white;
+			font-weight: 200;
+		}
+	}
+}

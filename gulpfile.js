@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var watch = require('gulp-watch');
 var sass = require('gulp-sass');
 
-var scssPath = './gulp_files/scss/';
+var scssPath = './src/';
 var cssDest = './src';
 
 
@@ -17,7 +17,9 @@ gulp.task('sass', function () {
 });
 
 gulp.task('watch-scss', function() {
-	gulp.watch(`${scssPath}**/*.scss`, ['sass']);
+	watch(`${scssPath}**/*.scss`, function(){
+		gulp.start('sass');
+	});
 });
 
 gulp.task('watch', ['sass', 'watch-scss']);
