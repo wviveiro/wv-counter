@@ -1,7 +1,6 @@
 @import '../../_variables';
 
 .counter-container{
-	background: #F00; /* For browsers that do not support gradients */
     position: relative;
 
 
@@ -48,4 +47,10 @@
 		    font-size: 28px;
     	}
     }
+}
+
+.empty-counters {
+    color: $white;
+    text-align: center;
+    margin-top: 30px;
 }

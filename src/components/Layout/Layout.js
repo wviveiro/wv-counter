@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Switch, Route, Link} from 'react-router-dom';
+import {Switch, Route, Link, withRouter} from 'react-router-dom';
 import './Layout.css';
 import Counter from '../Counter/Counter';
 import NewCounter from '../NewCounter/NewCounter';
+import OpenCounter from '../OpenCounter/OpenCounter';
 import store from '../../stores/store';
 
 class Layout extends Component {
@@ -15,6 +16,9 @@ class Layout extends Component {
 		});
 
 		this.state = store.getState();
+	}
+	goTo(path) {
+		this.props.history.push(path);
 	}
 	render() {
 		let linkLeft = '';
@@ -56,7 +60,8 @@ class Layout extends Component {
 				<div className="layout-body">
 					<Switch>
 						<Route exact path="/" component={Counter} />
-						<Route path="/counter/new" component={NewCounter} />
+						<Route parent={this} path="/counter/new" component={NewCounter} />
+						<Route parent={this} path="/counter/:id_counter" component={OpenCounter} />
 					</Switch>
 				</div>
 			</div>
@@ -64,4 +69,4 @@ class Layout extends Component {
 	}
 }
 
-export default Layout;
+export default withRouter(Layout);

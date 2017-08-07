@@ -5,6 +5,13 @@ const formControl = {
 	invalid: 'form-group error'
 }
 
+let counters = [];
+
+if (window.localStorage.getItem('counters')) {
+	counters = JSON.parse(window.localStorage.getItem('counters'));
+}
+
+
 const initialNewCounter = {
 	title: '',
 	date: '',
@@ -18,8 +25,7 @@ const initialNewCounter = {
 	btnSave: {
 		value: 'Save',
 		disabled: false
-	},
-	isSaved: false
+	}
 }
 
 const initialState = {
@@ -29,7 +35,7 @@ const initialState = {
 		linkLeft: false
 	},
 	newCounter: Object.assign({}, initialNewCounter),
-	counters: []
+	counters: counters.slice(0)
 }
 
 /**
@@ -46,6 +52,16 @@ const setNewCounterInvalid = (state, field) => {
 const changeNewCounterField = (state, field, value) => {
 	state.newCounter[field] = value;
 	state.newCounter.formControl[field] = formControl.valid;
+	return state;
+}
+
+const setCounterForm = (state, fields) => {
+	state.newCounter = Object.assign({}, initialNewCounter);
+	state.newCounter.title = fields.title;
+	state.newCounter.date = fields.date;
+	state.newCounter.time = fields.time;
+	state.newCounter.color = fields.color;
+
 	return state;
 }
 
@@ -96,11 +112,31 @@ const handleStore = (state = initialState, action) => {
 				time: newState.newCounter.time,
 				color: newState.newCounter.color,
 			});
-			newState.newCounter.isSaved = true;
+			window.localStorage.setItem('counters', JSON.stringify(newState.counters));
+			newState.newCounter = Object.assign({}, initialNewCounter);
 		break;
-		case 'RESET_NEW_COUNTER':
-			newState.NewCounter = Object.assign({}, initialNewCounter);
+		case 'GOTO':
+			newState.layout.obj.goTo(action.path);
 		break;
+		case 'ADD_COUNTER_TIME_DIFF':
+			newState.counters[action.index].days = action.days;
+			newState.counters[action.index].hours = action.hours;
+			newState.counters[action.index].minutes = action.minutes;
+			newState.counters[action.index].seconds = action.seconds;
+		break;
+		case 'SET_COUNTER_FORM':
+			newState = setCounterForm(newState, action.fields);
+		break;
+		case 'SAVE_EXISTENT_COUNTER':
+			newState.counters[action.index] = {
+				title: newState.newCounter.title,
+				date: newState.newCounter.date,
+				time: newState.newCounter.time,
+				color: newState.newCounter.color
+			}
+			window.localStorage.setItem('counters', JSON.stringify(newState.counters));
+			newState.newCounter = Object.assign({}, initialNewCounter);
+			break;
 		default:
 			//nothing happens
 	}

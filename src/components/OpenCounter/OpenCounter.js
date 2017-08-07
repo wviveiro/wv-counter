@@ -2,15 +2,15 @@ import React, {Component} from 'react';
 import store from '../../stores/store';
 import CounterForm from '../../components/CounterForm/CounterForm';
 
-class NewCounter extends Component {
+class OpenCounter extends Component {
 	constructor(props) {
 		super(props);
-		this.state = store.getState().newCounter;
+		this.state = store.getState().counters[+this.props.match.params.id_counter];
 	}
 	componentDidMount() {
 		store.dispatch({
 			type: 'CHANGE_LAYOUT_HEADER',
-			title: 'New Counter',
+			title: 'Edit Counter',
 			linkLeft: {
 				value: 'Back',
 				link: '/'
@@ -19,17 +19,16 @@ class NewCounter extends Component {
 		});
 	}
 	saveNewCounter() {
-		store.dispatch({type: 'SAVE_NEW_COUNTER'});
-		this.setState(store.getState().newCounter);
+		store.dispatch({type: 'SAVE_EXISTENT_COUNTER', index: +this.props.match.params.id_counter});
 		store.dispatch({type: 'GOTO', path: '/'});
 	}
 	render() {
 
 		let fields = {
-			title: '',
-			date: '',
-			time: '',
-			color: '#0000FF',
+			title: this.state.title,
+			date: this.state.date,
+			time: this.state.time,
+			color: this.state.color,
 		};
 
 		return (
@@ -38,4 +37,4 @@ class NewCounter extends Component {
 	}
 }
 
-export default NewCounter;
+export default OpenCounter;
